@@ -85,19 +85,34 @@ while($arreglo2=pg_fetch_array($query2)){
 
           /////////cambiar estatus de detalle de apartado a 0 
           $sql3 = "UPDATE ventas_productos SET estatus='$estatusCancelado' WHERE id_venta_producto='$id'";
-          $result3=pg_query($conexion,$sql3);
+          
 
 
           //codigo para modificar la cantidad del producto Disponible
              $sql1 = "UPDATE apartado SET estatus='$estatusCancelado' WHERE id_apartado_usuario='$id_apartado'";
-             $result=pg_query($conexion,$sql1);
+             
 
 
               ///
              $sql4 = "UPDATE detalle_apartado SET estatus='$estatusCancelado' WHERE id_apartado='$id_apartado'";
-             $result4=pg_query($conexion,$sql4);
+             
+             date_default_timezone_set('America/Caracas');
+             $date_time=date('d/m/Y H:i');
 
+             $sqlLog0 = str_replace("'","",$sqlP);
+             $sqlLog1 = str_replace("'","",$sql3);
+             $sqlLog2 = str_replace("'","",$sql1);
+             $sqlLog3 = str_replace("'","",$sql4);
+             $sqlLog = $sqlLog0.', '.$sqlLog1.', '.$sqlLog2.', '.$sqlLog3;
+             $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+             VALUES
+             ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
 
+              $queryPreLog = pg_query($conexion,$sqlPreLog);
+             
+              $result4=pg_query($conexion,$sql4);
+              $result=pg_query($conexion,$sql1);
+              $result3=pg_query($conexion,$sql3);
           //--------------------el aviso de que se ejecuto el apartado-----------------------------------//
 
           if ($result==true and $result3==true and $result4==true and $result5==true){

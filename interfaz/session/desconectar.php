@@ -25,13 +25,21 @@ if($_SESSION['id_usuarioA']){	//proceso para que un usuario Comun se desconecte 
 	
 //////////////////////////////////////////////////tabla de auditoria//////////////////////////////////////
 $logueo_off=0;
+function GetMAC(){
+    ob_start();
+    system('getmac');
+    $Content = ob_get_contents();
+    ob_clean();
+    return substr($Content, strpos($Content,'\\')-20, 17);
+}
+$mac = GetMAC();
 date_default_timezone_set('America/Caracas');
 $date_time=date('d/m/Y H:i');
-$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session)
+$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session, mac_usu)
 
                 VALUES
 
-            ('{$_SESSION['id_usuarioA']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_off')";
+            ('{$_SESSION['id_usuarioA']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_off', '$mac')";
 
 
 

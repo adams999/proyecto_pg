@@ -101,6 +101,20 @@ if($resul1>=2){
           //codigo para modificar la cantidad del producto Disponible
           $productos_disponiblesAct=$productos_disponibles+$cantidadApartada;
              $sql1 = "UPDATE catalogo_venta SET productos_disponibles='$productos_disponiblesAct' WHERE id_producto_venta='$id_producto_venta'";
+             
+              date_default_timezone_set('America/Caracas');
+              $date_time=date('d/m/Y H:i');
+
+              $sqlLog1 = str_replace("'","",$sql3);
+              $sqlLog2 = str_replace("'","",$sql1);
+              $sqlLog = $sqlLog1.', '.$sqlLog2;
+              $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+              VALUES
+              ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+              $queryPreLog = pg_query($conexion,$sqlPreLog);
+
+             
              $result=pg_query($conexion,$sql1);
 
 
@@ -132,26 +146,43 @@ if($resul1>=2){
 
       if($resul1==1 and $resul2==1){
           //------------------update en el apartado y catalogo de producto--------------------------------------//
-          $sql2 = "UPDATE apartado SET estatus='$estatusDesactivado' WHERE id_apartado_usuario='$id_apartado' and id_usuario='$id_usuario' and estatus='1'";
-          $result2=pg_query($conexion,$sql2);
-
+          
 
           /////////cambiar estatus de detalle de apartado a 0 
           $sql3 = "UPDATE detalle_apartado SET estatus='$estatusDesactivado' WHERE id_detalle_apartado='$id' and id_usuario='$id_usuario' and id_producto_venta='$id_producto_venta' and estatus=1";
-          $result3=pg_query($conexion,$sql3);
+          
 
 
           //codigo para modificar la cantidad del producto Disponible
-          $productos_disponiblesAct=$productos_disponibles+$cantidadApartada;
+            $productos_disponiblesAct=$productos_disponibles+$cantidadApartada;
              $sql1 = "UPDATE catalogo_venta SET productos_disponibles='$productos_disponiblesAct' WHERE id_producto_venta='$id_producto_venta'";
-             $result=pg_query($conexion,$sql1);
+             
+             
+             $sql2 = "UPDATE apartado SET estatus='$estatusDesactivado' WHERE id_apartado_usuario='$id_apartado' and id_usuario='$id_usuario' and estatus='1'";
+             
+             date_default_timezone_set('America/Caracas');
+              $date_time=date('d/m/Y H:i');
 
+              $sqlLog2 = str_replace("'","",$sql3);
+              $sqlLog3 = str_replace("'","",$sql1);
+              $sqlLog1 = str_replace("'","",$sql2);
+              $sqlLog = $sqlLog1.', '.$sqlLog2.', '.$sqlLog3;
+              $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+              VALUES
+              ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
 
+              $queryPreLog = pg_query($conexion,$sqlPreLog);
+              
+              $result=pg_query($conexion,$sql1);
+              $result3=pg_query($conexion,$sql3);
+            $result2=pg_query($conexion,$sql2);
           //--------------------el aviso de que se ejecuto el apartado-----------------------------------//
 
           if ($result==true and $result2==true and $result3==true){
              // proceso Apartado
-
+              
+              
+              
              echo "<script>alert('Administrador -{$_SESSION['nombre']} - Has Eliminado El Apartado del Producto Con el ID:  --$id_detalle_apartado--  Satifactoriamente!!!');
               window.location='../listaProductosDeUsuarios.php#ir';exit();</script>";
                 }else{

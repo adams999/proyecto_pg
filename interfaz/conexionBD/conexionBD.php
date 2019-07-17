@@ -1,7 +1,7 @@
 <?php
 //conexion base de datos yural
 $user = "postgres";
-$password = "adams24819181";
+$password = "24819181";
 $dbname = "yural";
 $port = "5432";
 $host = "localhost";

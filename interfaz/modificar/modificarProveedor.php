@@ -71,6 +71,15 @@ else{
 
 $sql2 = "UPDATE proveedores SET id_usuario_a='$id_usuario_admin', nombre_proveedor='$nombre_proveedor', razon_social_proveedor='$razon_social_proveedor', direccion_proveedor='$direccion_proveedor', telef_proveedor='$telef_proveedor', tipo_producto='$tipo_producto', correo_proveedor='$correo_proveedor' where id_proveedor='$id'";
 
+date_default_timezone_set('America/Caracas');
+$date_time=date('d/m/Y H:i');
+
+$sqlLog = str_replace("'","",$sql2);
+$sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+VALUES
+('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+$queryPreLog = pg_query($conexion,$sqlPreLog);
 
    $result=pg_query($conexion,$sql2);
    

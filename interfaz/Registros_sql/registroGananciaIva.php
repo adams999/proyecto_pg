@@ -49,6 +49,15 @@ $pvp_ok=number_format($pvp,2,",",".");
 
 $act="UPDATE catalogo_venta SET precio_base='$precio_base_ok', iva_producto='$iva_producto_ok', pvp='$pvp_ok' WHERE id_producto_venta='$id_producto_venta'";
 
+date_default_timezone_set('America/Caracas');
+$date_time=date('d/m/Y H:i');
+
+$sqlLog = str_replace("'","",$act);
+$sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+VALUES
+('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+
 $actIvaProd=pg_query($conexion,$act);
 }
 

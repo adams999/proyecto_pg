@@ -11,7 +11,6 @@ if ($_SESSION['id_usuarioA']) {
 require("conexionBD/conexionBD.php");
 
 
-
 $acumulador=0;  
 $sql=("SELECT * FROM apartado where estatus=1");
 

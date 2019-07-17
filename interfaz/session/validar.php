@@ -35,6 +35,15 @@ else{
 $sql2=pg_query($conexion,"SELECT * FROM usuario WHERE correo_usuario='$username' and bandera='10' and estatus='1'");
 if($f2=pg_fetch_assoc($sql2)){
 	if($pass===$f2['contra_usuario']){
+		function GetMAC(){
+			ob_start();
+			system('getmac');
+			$Content = ob_get_contents();
+			ob_clean();
+			return substr($Content, strpos($Content,'\\')-20, 17);
+		}
+
+		$_SESSION['mac_usu']=GetMAC();
 		$_SESSION['id_usuarioA']=$f2['id_usuario'];
 		$_SESSION['cedula_usuarioA']=$f2['cedula_usuario'];
 		$_SESSION['nombre']=$f2['nombre_usuario'];
@@ -82,11 +91,12 @@ if($f2=pg_fetch_assoc($sql2)){
 $logueo_activo=1;
 date_default_timezone_set('America/Caracas');
 $date_time=date('d/m/Y H:i');
-$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session)
+$mac = GetMAC();
+$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session, mac_usu)
 
     	 		VALUES
 
-    		('{$_SESSION['id_usuarioA']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_activo')";
+    		('{$_SESSION['id_usuarioA']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_activo','$mac')";
 
 
 
@@ -106,6 +116,16 @@ else{
 $sql=pg_query($conexion,"SELECT * FROM usuario WHERE correo_usuario='$username' and bandera='1' and estatus='1'");
 if($f=pg_fetch_assoc($sql)){
 	if($pass===$f['contra_usuario']){
+
+		function GetMAC(){
+			ob_start();
+			system('getmac');
+			$Content = ob_get_contents();
+			ob_clean();
+			return substr($Content, strpos($Content,'\\')-20, 17);
+		}
+
+		$_SESSION['mac_usu']=GetMAC();
 		$_SESSION['id_usuario']=$f['id_usuario'];
 		$_SESSION['cedula_usuario']=$f['cedula_usuario'];
 		$_SESSION['nombre_usuario']=$f['nombre_usuario'];
@@ -164,11 +184,12 @@ if($f=pg_fetch_assoc($sql)){
 $logueo_activo=1;
 date_default_timezone_set('America/Caracas');
 $date_time=date('d/m/Y H:i');
-$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session)
+$mac = GetMAC();
+$insertar = "INSERT INTO session (id_usuario, fecha_hora_session, ip_session, permiso_session, mac_usu)
 
     	 		VALUES
 
-    		('{$_SESSION['id_usuario']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_activo')";
+    		('{$_SESSION['id_usuario']}', '$date_time', '{$_SERVER['REMOTE_ADDR']}', '$logueo_activo', '$mac')";
 
 
 

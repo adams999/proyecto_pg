@@ -65,6 +65,17 @@ if ($cambiarImagen!=null) {
 	
 	$sql3 = "UPDATE catalogo_venta SET imagen='$cambiarImagen', id_usuario_a='$usuarioAdmin' where codigo_producto_v='$codigoProductoV'";
 
+   date_default_timezone_set('America/Caracas');
+    $date_time=date('d/m/Y H:i');
+
+    $sqlLog = str_replace("'","",$sql3);
+    $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+    VALUES
+    ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+    $queryPreLog = pg_query($conexion,$sqlPreLog);
+
+
    $result3=pg_query($conexion,$sql3);
 
    if ($result3==true) {
@@ -82,6 +93,16 @@ if ($precioCosto==null and $codigoProductoV!=null and $cambiarNombre!=null and $
 
    $result=pg_query($conexion,$sql2);
 
+   date_default_timezone_set('America/Caracas');
+    $date_time=date('d/m/Y H:i');
+
+    $sqlLog = str_replace("'","",$sql2);
+    $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+    VALUES
+    ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+    $queryPreLog = pg_query($conexion,$sqlPreLog);
+
 //aqui saldra este aviso y saldra que el proveedor esta eliminado "logicamente"
    if ($result==true) {
    	echo "<script>alert('ENHORABUENA!!   Administrador: -$usuarioAdmin- Has Cambiado El Producto Con el Codigo: $codigoProductoV.   El Nombre Es: $cambiarNombre.   Marca: $cambiarMarca.   Tipo U.: $cambiarTipoU.   Disponibilidad: $cambiarDisponibilidad.   Descripción: $cambiarDescripcion.   LOS PRECIOS NO SUFRIERON CAMBIOS....');
@@ -92,6 +113,16 @@ if ($precioCosto==null and $codigoProductoV!=null and $cambiarNombre!=null and $
 if ($precioCosto!=null and $codigoProductoV!=null and $cambiarNombre!=null and $cambiarMarca!=null and $cambiarTipoU!=null and $cambiarDisponibilidad!=null and $cambiarDescripcion!=null and $cambiarPrecioBase!=null and $cambiarIva!=null and $cambiarPvp!=null) {
   
   $sql5 = "UPDATE catalogo_venta SET nombre_producto_v='$cambiarNombre', id_usuario_a='$usuarioAdmin', marca='$cambiarMarca', descripcion='$cambiarDescripcion', tipo_unidad='$cambiarTipoU',  productos_disponibles='$cambiarDisponibilidad', precio_base='$cambiarPrecioBase', iva_producto='$cambiarIva', pvp='$cambiarPvp', precio_costo='$precioCosto' where codigo_producto_v='$codigoProductoV'";
+
+  date_default_timezone_set('America/Caracas');
+  $date_time=date('d/m/Y H:i');
+
+  $sqlLog = str_replace("'","",$sql5);
+  $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+  VALUES
+  ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+
+  $queryPreLog = pg_query($conexion,$sqlPreLog);
 
    $result5=pg_query($conexion,$sql5);
 
