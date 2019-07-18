@@ -49,6 +49,17 @@ $num_cuen_usua=$pref_cuenta.$num_cuen_usua;
 				
 				$sql2 = "UPDATE bancos_usuario SET nomb_banc_usua='$nomb_banc_usua', tipo_cuen_usua='$tipo_cuen_usua', titu_cuen_usua='$titu_cuen_usua', cedu_cuen_usua='$cedu_cuen_usua', num_cuen_usua='$num_cuen_usua' WHERE id_banco_usuario='$id' ";
 				   
+				date_default_timezone_set('America/Caracas');
+				$date_time = date('d/m/Y H:i');
+			
+				$sqlLog = str_replace("'", "", $sql2);
+				$sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
+							   VALUES
+							   ('{$_SESSION['id_usuario']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
+			
+				$queryPreLog = pg_query($conexion, $sqlPreLog);
+			
+
 				   $tot2 = pg_query($conexion,$sql2);
 
 					//si se pudieron realizar los cambios saldra este aviso automaticamente
@@ -60,4 +71,3 @@ $num_cuen_usua=$pref_cuenta.$num_cuen_usua;
 			}
 			
 pg_close($conexion);
- ?>
