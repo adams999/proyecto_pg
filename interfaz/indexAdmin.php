@@ -261,6 +261,16 @@ while(@$arreglo4=pg_fetch_array($query5)){//este arreglo ordena la informacion d
     </a>
 </div>
 
+
+
+<div class="col-lg-offset-6 col-md-offset-6 col-sm-offset-6 col-lg-6 col-md-6 col-sm-6 col-xs-12" align="center"><br><br>
+    <hr><a href="logs.php#ir" >
+        <button class="btn btn-info" style="font-size: 12pt">
+            Registros de Movimientos <i class="glyphicon glyphicon-tasks"></i>
+        </button>
+    </a>
+</div>
+
 </article>
 <?php 
         require("include/piePagina.php");
