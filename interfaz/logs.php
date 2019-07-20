@@ -183,23 +183,23 @@ if ($_SESSION['id_usuarioA']) {
                 $arreglo['val_mod_log'] = str_replace(['"',"'"], "", $arreglo['val_mod_log']);
 
                 //aqui muestro el tr con los PEDIDOS correspondientes 
-                echo '   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
+                ?>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
                     <table class="table table-hover table-bordered table-condensed" align="center">
                         <tr class="parrafo info" align="center">
-                            <td class="titulo" width="30%"><b>CI: </b>' . $arreglo['cedula_usuario'] . '<br><b>Nombre: </b>' . $arreglo['nombre_usuario'] . '<br><b>Apellido: </b>' . $arreglo['apellido_usuario'] . '<br><b>Email: </b>' . $arreglo['correo_usuario'] . '</td>
-                            <td class="titulo" width="30%"><b>IP: </b>' . $arreglo['ip_usu'] . ' <br><b>Navegadores</b>' . $arreglo['inf_usu'] . '<br><b>Url: </b>' . $arreglo['url_sql'] . '<br><b>MAC: </b>' . $arreglo['mac_usu'] . '</td>
-                            <td class="titulo" width="30%">' . $arreglo['date_log'] . '</td>
+                            <td class="titulo" width="30%"><b>CI: </b> <?php echo $arreglo['cedula_usuario'];?>. <br><b>Nombre: </b> <?php echo $arreglo['nombre_usuario']; ?> <br><b>Apellido: </b><?php echo $arreglo['apellido_usuario'];?><br><b>Email: </b><?php  $arreglo['correo_usuario']; ?></td>
+                            <td class="titulo" width="30%"><b>IP: </b><?php $arreglo['ip_usu']; ?><br><b>Navegadores</b><?php echo $arreglo['inf_usu'];?> <br><b>Url: </b> <?php $arreglo['url_sql']; ?><br><b>MAC: </b><?php echo $arreglo['mac_usu'];?></td>
+                            <td class="titulo" width="30%"><?php $arreglo['date_log'];?></td>
                             <td class="titulo" width="10%"><br><br>
-                            <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('.$arreglo["log_sql"],$arreglo["val_mod_log"].')";>
+                            <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo $arreglo["val_mod_log"];?>','<?php echo $arreglo["log_sql"];?>')">
                             <b>Info</b><br><i class="glyphicon glyphicon-eye-open"></i>
                                 </a> 
                             </td>
                         </tr> 
 
                     </table>
-                </div>';
-
-                echo '';
+                </div>
+            <?php 
             }
 
             echo '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="color:green"><hr width="75%">Pag.';
@@ -220,10 +220,10 @@ if ($_SESSION['id_usuarioA']) {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" id="modalLogs">
                             <script>
                                 function Mostrar(a, b) {
-                                    console.log(a, b);
+                                    document.getElementById('modalLogs').innerHTML = a + b ;
                                 }
                             </script>
                         </div>
