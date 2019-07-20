@@ -32,13 +32,61 @@ if ($_SESSION['id_usuarioA']) {
                     <a name="ir"></a>
                     Movimientos &nbsp; <i class="glyphicon glyphicon-globe"></i></p>
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <form action="#" class="form form-group">
+                    <label>
+                        Seleccionar Filtrado
+                    </label>
+                    <select name="tabla" id="tabla" class="form-control has-success">
+                        <option value="usuarios">Usuarios</option>
+                        <option value="catalogo_venta">Productos</option>
+                        <option value="Ventas">Ventas</option>
+                    </select>
+                </form>
+            </div>
 
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <form action="#" class="form form-group">
+                    <label>
+                        Acción
+                    </label>
+                    <select name="tabla" id="tabla" class="form-control has-success">
+                        <option value="INSERT">Registro</option>
+                        <option value="UPDATE">Modificaciones</option>
+                    </select>
+                </form>
+
+            </div>
 
             <?php
 
             require("conexionBD/conexionBD.php");
 
-            $sql = "SELECT * FROM pedidos ORDER BY numero_pedido, id_pedido DESC ";
+            $sql = "SELECT
+                logs.id_log,
+                logs.id_usu,
+                usuario.cedula_usuario,
+                usuario.nombre_usuario,
+                usuario.apellido_usuario,
+                usuario.correo_usuario,
+                logs.ip_usu,
+                logs.id_pre_log,
+                logs.tab_log,
+                logs.acc_log,
+                logs.log_sql,
+                logs.date_log,
+                logs.inf_usu,
+                logs.url_sql,
+                logs.val_mod_log,
+                logs.mac_usu
+            FROM
+                logs
+            INNER JOIN usuario ON logs.id_usu = usuario.id_usuario
+            WHERE
+                tab_log = 'ventas_productos'
+            AND acc_log = 'UPDATE'
+            AND date_log BETWEEN '15-07-2019'
+            AND now() ";
             /* codigos de paginacion */
             $registros = pg_query($conexion, $sql);
             $num = pg_num_rows($registros);
@@ -58,9 +106,57 @@ if ($_SESSION['id_usuarioA']) {
             if (isset($_GET['ini'])) {
                 $ini = $_GET['ini'];
                 $fin = $_GET['fin'];
-                $sql = "SELECT * FROM pedidos ORDER BY numero_pedido, id_pedido DESC  LIMIT 10 offset $ini";
+                $sql = "SELECT
+                    logs.id_log,
+                    logs.id_usu,
+                    usuario.cedula_usuario,
+                    usuario.nombre_usuario,
+                    usuario.apellido_usuario,
+                    usuario.correo_usuario,
+                    logs.ip_usu,
+                    logs.id_pre_log,
+                    logs.tab_log,
+                    logs.acc_log,
+                    logs.log_sql,
+                    logs.date_log,
+                    logs.inf_usu,
+                    logs.url_sql,
+                    logs.val_mod_log,
+                    logs.mac_usu
+                FROM
+                    logs
+                INNER JOIN usuario ON logs.id_usu = usuario.id_usuario
+                WHERE
+                    tab_log = 'ventas_productos'
+                AND acc_log = 'UPDATE'
+                AND date_log BETWEEN '15-07-2019'
+                AND now()  LIMIT 10 offset $ini";
             } else {
-                $sql = "SELECT * FROM pedidos ORDER BY numero_pedido, id_pedido DESC  LIMIT 10 offset 0";
+                $sql = "SELECT
+                    logs.id_log,
+                    logs.id_usu,
+                    usuario.cedula_usuario,
+                    usuario.nombre_usuario,
+                    usuario.apellido_usuario,
+                    usuario.correo_usuario,
+                    logs.ip_usu,
+                    logs.id_pre_log,
+                    logs.tab_log,
+                    logs.acc_log,
+                    logs.log_sql,
+                    logs.date_log,
+                    logs.inf_usu,
+                    logs.url_sql,
+                    logs.val_mod_log,
+                    logs.mac_usu
+                FROM
+                    logs
+                INNER JOIN usuario ON logs.id_usu = usuario.id_usuario
+                WHERE
+                    tab_log = 'ventas_productos'
+                AND acc_log = 'UPDATE'
+                AND date_log BETWEEN '15-07-2019'
+                AND now()  LIMIT 10 offset 0";
             }
 
             $query = pg_query($conexion, $sql);
@@ -71,16 +167,10 @@ if ($_SESSION['id_usuarioA']) {
             echo '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <table class="table table-bordered" align="center">
             <tr class=" btn-primary trTitulo" align="center">
-                <td class="titulo" width="3%">ID </td>
-                <td class="titulo" width="7%">N° Pedido</td>
-                <td class="titulo" width="10%">Registró</td>
-                <td class="titulo" width="10%">Proveedor</td>
-                <td class="titulo" width="15%">COD Prod</td>
-                <td class="titulo" width="30%">Nombre Producto</td>
-                <td class="titulo" width="5%">Cant.</td>
-                <td class="titulo" width="10%">Costo U.</td>
-                <td class="titulo" width="10%">Fecha</td>
-                
+                <td class="titulo" width="30%">Usuario</td>
+                <td class="titulo" width="30%">Información</td>
+                <td class="titulo" width="30%">Fecha</td>
+                <td class="titulo" width="10%">Datos/SQL</td>
             </tr>
         </table>
     </div>';
@@ -88,62 +178,62 @@ if ($_SESSION['id_usuarioA']) {
 
 
             while ($arreglo = pg_fetch_array($query)) { //este arreglo ordena la informacion del array correspondiente a los Pedidos para despues llamar la informacion que se necesite
-                $idPedido = $arreglo['id_pedido'];
-                $numeroPedido = $arreglo['numero_pedido'];
-                $idUsuarioA = $arreglo['id_usuario_a'];
-                $idProveedor = $arreglo['id_proveedor'];
-                $codigoProducto = $arreglo['codigo_producto'];
-                $nombreProducto = $arreglo['nombre_producto'];
-                $cantidadPedido = $arreglo['cantidad_producto'];
-                $precioCosto = $arreglo['precio_costo'];
-                $fechaPedido = $arreglo['fecha_pedido'];
+               
+                $arreglo['log_sql']=str_replace(['"',"'"], "", $arreglo['log_sql']);
+                $arreglo['val_mod_log'] = str_replace(['"',"'"], "", $arreglo['val_mod_log']);
 
+                //aqui muestro el tr con los PEDIDOS correspondientes 
+                echo '   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
+                    <table class="table table-hover table-bordered table-condensed" align="center">
+                        <tr class="parrafo info" align="center">
+                            <td class="titulo" width="30%"><b>CI: </b>' . $arreglo['cedula_usuario'] . '<br><b>Nombre: </b>' . $arreglo['nombre_usuario'] . '<br><b>Apellido: </b>' . $arreglo['apellido_usuario'] . '<br><b>Email: </b>' . $arreglo['correo_usuario'] . '</td>
+                            <td class="titulo" width="30%"><b>IP: </b>' . $arreglo['ip_usu'] . ' <br><b>Navegadores</b>' . $arreglo['inf_usu'] . '<br><b>Url: </b>' . $arreglo['url_sql'] . '<br><b>MAC: </b>' . $arreglo['mac_usu'] . '</td>
+                            <td class="titulo" width="30%">' . $arreglo['date_log'] . '</td>
+                            <td class="titulo" width="10%"><br><br>
+                            <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('.$arreglo["log_sql"],$arreglo["val_mod_log"].')";>
+                            <b>Info</b><br><i class="glyphicon glyphicon-eye-open"></i>
+                                </a> 
+                            </td>
+                        </tr> 
 
+                    </table>
+                </div>';
 
-                $sql2 = ("SELECT * FROM proveedores where id_proveedor='$idProveedor'");
-
-                //la variable  $pg viene de connect_db que lo traigo con el require("conexionBD/conexionBD.php");
-                $query2 = pg_query($conexion, $sql2);
-
-
-                while ($arreglo2 = pg_fetch_array($query2)) { //este arreglo ordena la informacion del array Segun el id de proveedor que envie el primer arreglo paraq despues mostrar el nombre del proveedor segun el id del proveedor
-                    $nombreProveedor = $arreglo2['nombre_proveedor'];
-
-
-
-
-
-                    //aqui muestro el tr con los PEDIDOS correspondientes 
-                    echo '   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">   
-                        <table class="table table-hover table-bordered table-condensed" align="center">
-                            <tr class="parrafo info" align="center">
-                                <td class="titulo" width="3%">' . $idPedido . ' </td>
-                                <td class="titulo" width="7%">' . $numeroPedido . '</td>
-                                <td class="titulo" width="10%">' . $idUsuarioA . '</td>
-                                <td class="titulo" width="10%"><b>ID:</b>&nbsp;&nbsp;&nbsp;' . $idProveedor . '<br>' . $nombreProveedor . '</td>
-                                <td class="titulo" width="15%">' . $codigoProducto . '</td>
-                                <td class="titulo" width="30%">' . $nombreProducto . '</td>
-                                <td class="titulo" width="5%">' . $cantidadPedido . '</td>
-                                <td class="titulo" width="10%">' . $precioCosto . '</td>
-                                <td class="titulo" width="10%">' . $fechaPedido . '</td>
-
-                            </tr> 
-
-                        </table>
-                    </div>';
-                }
+                echo '';
             }
+
             echo '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center" style="color:green"><hr width="75%">Pag.';
             for ($c = 1; $c <= $pag; $c++) {
                 $ini = $c * 10 - 10;
                 $fin = $ini + 9;
-                echo ' <a href="listaPedidos.php?ini=' . $ini . '&fin=' . $fin . '#ir">' . $c . '</a>&nbsp;&nbsp;';
+                echo ' <a href="logs.php?ini=' . $ini . '&fin=' . $fin . '#ir">' . $c . '</a>&nbsp;&nbsp;';
             }
             echo '</div>';
 
             ?>
-
-
+            <div class="modal fade" id="InfoSql" tabindex="-1" role="dialog" aria-labelledby="InfoSqlLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="InfoSqlLabel">Informacion del Movimiento</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <script>
+                                function Mostrar(a, b) {
+                                    console.log(a, b);
+                                }
+                            </script>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </article>
 
@@ -155,7 +245,7 @@ if ($_SESSION['id_usuarioA']) {
 
     <script src="../lib/jquery/jquery-3.1.1.min.js"></script>
     <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/ScriptImgYural.js"></script>
+
 </body>
 
 </html>
