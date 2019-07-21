@@ -18,6 +18,9 @@ if ($_SESSION['id_usuarioA']) {
     <link rel="stylesheet" type="text/css" href="css/styleCatalogo.css">
     <link rel="icon" href="img/icono1.ico">
     <script src="../lib/jquery/jquery-3.1.1.min.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/core.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/charts.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/themes/animated.js"></script>
     <script>
         function fechaIni() {
             $('#fFinal').attr('min', $('#fInicio').val());
@@ -33,10 +36,7 @@ if ($_SESSION['id_usuarioA']) {
             console.log('buscar');
             if ($('#tabla').val() == false || $('#accion').val() == false || $('#fInicio').val() == false || $('#fFinal').val() == false) {
                 alert('Ingresa Todos los datos para proceder a la busqueda');
-                stop();
-                exit();
             }
-
         }
     </script>
 </head>
@@ -54,6 +54,7 @@ if ($_SESSION['id_usuarioA']) {
                     <a name="ir"></a>
                     Movimientos &nbsp; <i class="glyphicon glyphicon-globe"></i></p>
             </div>
+
             <form class="form form-group" method="GET">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
 
@@ -139,6 +140,8 @@ if ($_SESSION['id_usuarioA']) {
                 </div>
             </form>
 
+            <div id="graficaBarras" style="width: 100%; height: 300px;"></div>                                                                                                                             
+
             <?php
 
             require("conexionBD/conexionBD.php");
@@ -184,7 +187,7 @@ if ($_SESSION['id_usuarioA']) {
                 OR tab_log = 'proveedores'
                 OR tab_log = 'usuario'
                 OR tab_log = 'ventas_productos'
-                AND acc_log = 'INSERT'";
+                AND acc_log = 'INSERT' ";
             }
             $sql .= " ORDER BY
             id_log DESC";
@@ -198,7 +201,7 @@ if ($_SESSION['id_usuarioA']) {
             @$prodIni = $_GET['ini'];
             @$prodFin = $_GET['fin'];
 
-            echo "<br><br><div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' align='right' style='font-size:80%; color:green;'>
+            echo "<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' align='right' style='font-size:80%; color:green;'>
             $num Movimientos. En $pag Páginas. ";
 
             if (isset($prodIni) and isset($prodFin)) {
@@ -228,11 +231,10 @@ if ($_SESSION['id_usuarioA']) {
                     logs.mac_usu
                 FROM
                     logs
-                INNER JOIN usuario ON logs.id_usu = usuario.id_usuario
-                WHERE ";
+                INNER JOIN usuario ON logs.id_usu = usuario.id_usuario";
 
                 if (isset($_GET['tabla'])) {
-                    $sql .= "tab_log = '" . $_GET['tabla'] . "'";
+                    $sql .= " WHERE tab_log = '" . $_GET['tabla'] . "'";
                 }
                 if (isset($_GET['accion'])) {
                     $sql .= " AND acc_log = '" . $_GET['accion'] . "'";
@@ -243,7 +245,7 @@ if ($_SESSION['id_usuarioA']) {
                 $sql .= " ORDER BY
                     id_log DESC
                     LIMIT 20 offset $ini";
-                //var_dump($sql);
+                var_dump($sql);
             } else {
                 $sql = "SELECT
                     logs.id_log,
@@ -286,7 +288,7 @@ if ($_SESSION['id_usuarioA']) {
                     OR tab_log = 'proveedores'
                     OR tab_log = 'usuario'
                     OR tab_log = 'ventas_productos'
-                    AND acc_log = 'INSERT'";
+                    AND acc_log = 'INSERT' ";
                 }
                 $sql .= " ORDER BY
                 id_log DESC";
@@ -391,10 +393,8 @@ if ($_SESSION['id_usuarioA']) {
         require("include/piePagina.php");
         ?>
     </section>
-
-
     <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-
+    <script src="js/amcharts.js"></script>
 </body>
 
 </html>
