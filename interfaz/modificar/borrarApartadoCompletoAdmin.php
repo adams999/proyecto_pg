@@ -74,6 +74,11 @@ $sql1 = "UPDATE apartado SET estatus='$estatusCancelado' WHERE id_apartado_usuar
 date_default_timezone_set('America/Caracas');
 $date_time = date('d/m/Y H:i');
 
+
+
+///
+$sql4 = "UPDATE detalle_apartado SET estatus='$estatusCancelado' WHERE id_apartado='$id'";
+
 $sqlLog2 = str_replace("'", "", $sqlP);
 $sqlLog3 = str_replace("'", "", $sql1);
 $sqlLog1 = str_replace("'", "", $sql4);
@@ -83,9 +88,6 @@ $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu,
              ('{$_SESSION['id_usuarioA']}', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '{$_SESSION['mac_usu']}')";
 
 $queryPreLog = pg_query($conexion, $sqlPreLog);
-
-///
-$sql4 = "UPDATE detalle_apartado SET estatus='$estatusCancelado' WHERE id_apartado='$id'";
 $result4 = pg_query($conexion, $sql4);
 $result = pg_query($conexion, $sql1);
 $result5 = pg_query($conexion, $sqlP);
@@ -93,7 +95,6 @@ $result5 = pg_query($conexion, $sqlP);
 
 if ($result == true and $result4 == true and $result5 == true) {
   // proceso Apartado
-
 
 
   echo "<script>alert('Administrador {$_SESSION['nombre']} {$_SESSION['apellido']} Has Cancelado/Eliminado el Apartado Con el ID:  --$id--  Satifactoriamente!. Todos los Productos Se Restablecieron Correctamente y estan Diponibles');
