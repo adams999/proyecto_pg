@@ -10,54 +10,18 @@ am4core.ready(function () {
     chart.scrollbarX = new am4core.Scrollbar();
 
     // Add data
-    chart.data = [{
-        "country": "USA",
-        "visits": 3025
-    }, {
-        "country": "China",
-        "visits": 1882
-    }, {
-        "country": "Japan",
-        "visits": 1809
-    }, {
-        "country": "Germany",
-        "visits": 1322
-    }, {
-        "country": "UK",
-        "visits": 1122
-    }, {
-        "country": "France",
-        "visits": 1114
-    }, {
-        "country": "India",
-        "visits": 984
-    }, {
-        "country": "Spain",
-        "visits": 711
-    }, {
-        "country": "Netherlands",
-        "visits": 665
-    }, {
-        "country": "Russia",
-        "visits": 580
-    }, {
-        "country": "South Korea",
-        "visits": 443
-    }, {
-        "country": "Canada",
-        "visits": 441
-    }];
+    chart.data = JSON.parse($('#dataGrafica').val());
 
     // Create axes
     var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "country";
+    categoryAxis.dataFields.category = "tabla";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
     categoryAxis.renderer.labels.template.horizontalCenter = "right";
     categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    categoryAxis.renderer.labels.template.rotation = 270;
+    categoryAxis.renderer.labels.template.rotation = 300;
     categoryAxis.tooltip.disabled = true;
-    categoryAxis.renderer.minHeight = 110;
+    categoryAxis.renderer.minHeight = 100;
 
     var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.minWidth = 50;
@@ -65,8 +29,8 @@ am4core.ready(function () {
     // Create series
     var series = chart.series.push(new am4charts.ColumnSeries());
     series.sequencedInterpolation = true;
-    series.dataFields.valueY = "visits";
-    series.dataFields.categoryX = "country";
+    series.dataFields.valueY = "cantidad";
+    series.dataFields.categoryX = "tabla";
     series.tooltipText = "[{categoryX}: bold]{valueY}[/]";
     series.columns.template.strokeWidth = 0;
 
@@ -88,5 +52,39 @@ am4core.ready(function () {
 
     // Cursor
     chart.cursor = new am4charts.XYCursor();
+
+
+
+
+
+
+    //////grafica de tortas
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart
+    var chart = am4core.create("graficaTorta", am4charts.PieChart);
+    chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    chart.data = JSON.parse($('#dataGrafica2').val());
+
+    if (chart) {
+   //aqui oculto la grafica principal si se aplica un filtro
+        $('#graficaBarras').hide();
+    }
+
+    var series = chart.series.push(new am4charts.PieSeries());
+    series.dataFields.value = "cantidad";
+    series.dataFields.radiusValue = "cantidad";
+    series.dataFields.category = "tabla";
+    series.slices.template.cornerRadius = 6;
+    series.colors.step = 3;
+
+    series.hiddenState.properties.endAngle = -90;
+
+    chart.legend = new am4charts.Legend();
+    // end am4core.ready()
+
 
 }); // end am4core.ready()

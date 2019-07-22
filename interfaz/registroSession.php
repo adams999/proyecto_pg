@@ -19,6 +19,10 @@ if ($_SESSION['id_usuarioA'] and $id) {
     <link href="css/style1.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="css/styleCatalogo.css">
     <link rel="icon" href="img/icono1.ico">
+    <script src="../lib/jquery/jquery-3.1.1.min.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/core.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/charts.js"></script>
+    <script src="../lib/amcharts_4.5.8/amcharts4/themes/animated.js"></script>
 </head>
 
 <body>
@@ -39,13 +43,45 @@ if ($_SESSION['id_usuarioA'] and $id) {
                     echo $cedula; ?></p>
             </div>
 
-            </div>
+
 
 
             <?php
             //aqui cargo la variable con la cedula correspondiente del usuario logeado en el momento, para poder comparar y traer lo que tengo en la base de datos de apartados y mostralos
 
             require("conexionBD/conexionBD.php");
+
+
+            $sqlGraf = 'SELECT
+                COUNT (permiso_session) AS cantidad,
+                permiso_session
+            FROM
+                "session"
+            WHERE
+            id_usuario = ' . "'" . $_GET['id'] . "'" . '
+            GROUP BY
+                permiso_session';
+
+            $query3 = pg_query($conexion, $sqlGraf);
+
+            while (@$arreglo3 = pg_fetch_array($query3)) {
+                $response3[] = [
+                    'accion' => $arreglo3['permiso_session'] == 1 ? 'Accede' : 'Desconecta',
+                    'cantidad' => $arreglo3['cantidad']
+                ];
+            }
+            ?>
+            <input id="dataGrafica" type="hidden" <?php if (isset($response3)) {
+                                                        echo "value='" . json_encode($response3)  . "'";
+                                                    }   ?>>
+            <?php
+    if(isset($response3)){
+        echo '<div id="graficaTorta" style="width: 100%; height: 500px; margin-bottom:100px"></div>';
+    }
+            
+
+
+
             $sql = "SELECT * FROM session where id_usuario='$id' ORDER BY id_session desc ";
             /* codigos de paginacion */
             $registros = pg_query($conexion, $sql);
@@ -103,7 +139,7 @@ if ($_SESSION['id_usuarioA'] and $id) {
                     <tr class="parrafo " align="center">
                         <td class="titulo" width="10%">' . $idSession . '</td>
                         <td class="titulo" width="30%">' . $fechaHora . '</td>
-                        <td class="titulo" width="30%"><b>IP:</b>' . $ipSession . '<br><b>MAC:</b>'.$mac.'</td>
+                        <td class="titulo" width="30%"><b>IP:</b>' . $ipSession . '<br><b>MAC:</b>' . $mac . '</td>
                         <td class="titulo" width="30%">';
                 if ($permiso_session == 1) {
                     echo '<i class="glyphicon glyphicon-log-in" style="color:blue;"></i> Accede ';
@@ -145,10 +181,8 @@ if ($_SESSION['id_usuarioA'] and $id) {
             ?>
         </section>
 
-
-        <script src="../lib/jquery/jquery-3.1.1.min.js"></script>
         <script src="../lib/bootstrap/js/bootstrap.min.js"></script>
-        <script src="js/ScriptImgYural.js"></script>
+        <script src="js/amchartsSession.js"></script>
 </body>
 
 </html>

@@ -52,7 +52,8 @@ if ($_SESSION['id_usuarioA']) {
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">
                 <p class="titulo1">
                     <a name="ir"></a>
-                    Movimientos &nbsp; <i class="glyphicon glyphicon-globe"></i></p>
+                    Movimientos &nbsp; <i class="glyphicon glyphicon-globe"></i>
+                </p>
             </div>
 
             <form class="form form-group" method="GET">
@@ -67,7 +68,7 @@ if ($_SESSION['id_usuarioA']) {
                                 } ?>>
                             <?php if (isset($_GET['tabla'])) {
                                 if ($_GET['tabla'] == 'catalogo_venta') {
-                                    echo  'inventario';
+                                    echo  'productos';
                                 } elseif ($_GET['tabla'] == 'ventas_productos') {
                                     echo 'ventas';
                                 } else {
@@ -77,7 +78,7 @@ if ($_SESSION['id_usuarioA']) {
                         <option value="apartado">apartado</option>
                         <option value="bancos_empresa">bancos_empresa</option>
                         <option value="bancos_usuario">bancos_usuario</option>
-                        <option value="catalogo_venta">inventario</option>
+                        <option value="catalogo_venta">productos</option>
                         <option value="opiniones">opiniones</option>
                         <option value="pedidos">pedidos</option>
                         <option value="proveedores">proveedores</option>
@@ -140,8 +141,6 @@ if ($_SESSION['id_usuarioA']) {
                 </div>
             </form>
 
-            <div id="graficaBarras" style="width: 100%; height: 300px;"></div>                                                                                                                             
-
             <?php
 
             require("conexionBD/conexionBD.php");
@@ -194,20 +193,12 @@ if ($_SESSION['id_usuarioA']) {
             //var_dump($sql.'ASDASDASD');
 
             /* codigos de paginacion */
-            $registros = pg_query($conexion, $sql);
-            $num = pg_num_rows($registros);
+            @$registros = pg_query($conexion, $sql);
+            @$num = pg_num_rows($registros);
             $pag = ceil($num / 20);
 
             @$prodIni = $_GET['ini'];
             @$prodFin = $_GET['fin'];
-
-            echo "<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' align='right' style='font-size:80%; color:green;'>
-            $num Movimientos. En $pag Páginas. ";
-
-            if (isset($prodIni) and isset($prodFin)) {
-                echo "&nbsp;&nbsp;&nbsp;Movimiento: $prodIni - $prodFin";
-            }
-            echo "</div>";
 
             if (isset($_GET['ini'])) {
                 $ini = $_GET['ini'];
@@ -245,7 +236,7 @@ if ($_SESSION['id_usuarioA']) {
                 $sql .= " ORDER BY
                     id_log DESC
                     LIMIT 20 offset $ini";
-                var_dump($sql);
+                //var_dump($sql);
             } else {
                 $sql = "SELECT
                     logs.id_log,
@@ -291,18 +282,84 @@ if ($_SESSION['id_usuarioA']) {
                     AND acc_log = 'INSERT' ";
                 }
                 $sql .= " ORDER BY
-                id_log DESC";
+                id_log DESC
+                LIMIT 20 offset 0";
+            }
+            //var_dump($sql);
+            @$query = pg_query($conexion, $sql);
+
+            $sqlGrafica = "SELECT
+                count(tab_log) AS cuenta,
+                tab_log
+            FROM
+                logs
+            
+            GROUP BY logs.tab_log
+            ORDER BY
+                tab_log ASC";
+
+            $query2 = pg_query($conexion, $sqlGrafica);
+
+            while ($arreglo2 = pg_fetch_array($query2)) {
+                $response[] = [
+                    'tabla' => $arreglo2['tab_log'],
+                    'cantidad' => $arreglo2['cuenta']
+                ];
             }
 
-            $query = pg_query($conexion, $sql);
+
+            if (isset($_GET['tabla']) and isset($_GET['fInicio']) and isset($_GET['fFinal'])) {
+                $sqlGraf2 = "SELECT
+                    COUNT (acc_log) AS cantidad,
+                    acc_log AS accion
+                FROM
+                    logs
+                WHERE
+                    tab_log = '" . $_GET['tabla'] . "'
+                AND DATE (date_log) BETWEEN '" . $_GET['fInicio'] . "'
+                AND '" . $_GET['fFinal'] . "'
+                GROUP BY
+                    logs.acc_log
+                ORDER BY
+                    acc_log ASC";
+
+                @$query3 = pg_query($conexion, $sqlGraf2);
+
+                while (@$arreglo3 = pg_fetch_array($query3)) {
+                    $response3[] = [
+                        'tabla' => $arreglo3['accion'],
+                        'cantidad' => $arreglo3['cantidad']
+                    ];
+                }
+            }
+
+            //echo "<pre>" . json_encode($response, JSON_PRETTY_PRINT) . "</pre>";
+            ?>
+            <input id="dataGrafica" type="hidden" <?php if (isset($response)) {
+                                                        echo "value='" . json_encode($response)  . "'";
+                                                    }   ?>>
+
+            <input id="dataGrafica2" type="hidden" <?php if (@isset($response3)) {
+                                                        echo "value='" . json_encode($response3)  . "'";
+                                                    }   ?>>
+
+            <?php
+            echo '<div id="graficaBarras" style="width: 100%; height: 300px;"></div>';
+
+            if (@isset($response3)) {
+                echo '<div id="graficaTorta" style="width: 100%; height: 500px;"></div>';
+            }
 
 
-            if (pg_fetch_array($query) == false) {
-                echo '<div align="center" style= "color:blue">
-                    No hay Resultados!
-                </div>';
-            } else {
-                echo '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            echo "<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' align='right' style='font-size:80%; color:green;'>
+            $num Movimientos. En $pag Páginas. ";
+
+            if (isset($prodIni) and isset($prodFin)) {
+                echo "&nbsp;&nbsp;&nbsp;Movimiento: $prodIni - $prodFin";
+                echo "</div>";
+            }
+            echo '</div><div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table class="table table-bordered" align="center">
                     <tr class=" btn-primary trTitulo" align="center">
                         <td class="titulo" width="30%">Usuario</td>
@@ -312,11 +369,16 @@ if ($_SESSION['id_usuarioA']) {
                     </tr>
                 </table>
             </div>';
+
+            if (@pg_fetch_array($query) == false) {
+                echo '<div align="center" style= "color:blue">
+                    No hay Resultados!
+                </div>';
             }
             ?>
 
             <?php
-            while ($arreglo = pg_fetch_array($query)) { //este arreglo ordena la informacion del array correspondiente a los Pedidos para despues llamar la informacion que se necesite
+            while (@$arreglo = pg_fetch_array($query)) { //este arreglo ordena la informacion del array correspondiente a los Pedidos para despues llamar la informacion que se necesite
 
                 $arreglo['log_sql'] = str_replace(['"', "'"], " ", $arreglo['log_sql']);
                 $arreglo['val_mod_log'] = str_replace(['"', "'"], " ", $arreglo['val_mod_log']);
@@ -327,7 +389,7 @@ if ($_SESSION['id_usuarioA']) {
                     <table class="table table-hover table-bordered table-condensed" align="center">
                         <tr class="parrafo info" align="center">
                             <td class="titulo" width="30%"><br><b>CI: </b> <?php echo $arreglo['cedula_usuario']; ?>. <br><b>Nombre: </b> <?php echo $arreglo['nombre_usuario']; ?> <br><b>Apellido: </b><?php echo $arreglo['apellido_usuario']; ?><br><b>Email: </b><?php echo $arreglo['correo_usuario']; ?></td>
-                            <td class="titulo" width="30%"><b>IP: </b><?php $arreglo['ip_usu']; ?><br><b>Navegadores</b><?php echo $arreglo['inf_usu']; ?> <br><b>Url: </b> <?php $arreglo['url_sql']; ?><br><b>MAC: </b><?php echo $arreglo['mac_usu']; ?></td>
+                            <td class="titulo" width="30%"><b>IP: </b><?php echo $arreglo['ip_usu']; ?><br><b>Navegadores</b><?php echo $arreglo['inf_usu']; ?> <br><b>Url: </b> <?php echo $arreglo['url_sql']; ?><br><b>MAC: </b><?php echo $arreglo['mac_usu']; ?></td>
                             <td class="titulo text-center" width="30%"><br><br><br><?php echo $arreglo['date_log']; ?></td>
                             <td class="titulo" width="10%"><br><br>
                                 <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo $arreglo["log_sql"]; ?>','<?php echo $arreglo["val_mod_log"]; ?>')">
@@ -375,13 +437,12 @@ if ($_SESSION['id_usuarioA']) {
                         <div class="modal-body row" id="modalLogs">
                             <script>
                                 function Mostrar(a, b) {
-                                    document.getElementById('modalLogs').innerHTML = a + b;
+                                    document.getElementById('modalLogs').innerHTML = '<b>SQL: </b>' + a + '<br><br>' + '<b>Registro: </b>' + b;
                                 }
                             </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
