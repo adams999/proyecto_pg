@@ -8,10 +8,10 @@ function Mostrar(a) {
         arrayData[i] = data[i];
     }
     console.log(a, arrayData);
-    document.getElementById('modalLogs').innerHTML = '<h3 align="center"><b>Usuario:</b> ' +
+    document.getElementById('modalLogs').innerHTML = '<h3 align="center"><strong>Usuario:</strong> ' +
         arrayData[12] + '  ' +
-        arrayData[13] + '<br> <b>Cedula: </b>' +
-        arrayData[14] + ' </h3><hr><h4 align="center">Menu</h4><div style="margin-left:10%">';
+        arrayData[13] + '<br> <strong>Cedula: </strong>' +
+        arrayData[14] + ' </h3><hr><h4 align="center"><strong>Menu</strong></h4><div style="margin-left:10%">';
     if (arrayData[0] == 't') {
         document.getElementById('modalLogs').innerHTML += '<b>Categoria Accesorios</b> <input type="checkbox" checked><br>';
     } else {
@@ -48,15 +48,16 @@ function Mostrar(a) {
         document.getElementById('modalLogs').innerHTML += '<b>Categoria Suspensión</b> <input type="checkbox"><br>';
     }
     if (arrayData[7] == 't') {
-        document.getElementById('modalLogs').innerHTML += '<b>Categoria Tracción</b> <input type="checkbox" checked>';
+        document.getElementById('modalLogs').innerHTML += '<b>Categoria Tracción</b> <input type="checkbox" checked><br>';
     } else {
-        document.getElementById('modalLogs').innerHTML += '<b>Categoria Tracción</b> <input type="checkbox">';
+        document.getElementById('modalLogs').innerHTML += '<b>Categoria Tracción</b> <input type="checkbox"><br>';
     }
 
     if (arrayData[15] == 10) {
-        document.getElementById('modalLogs').innerHTML += '<hr></div><h4 align="center"> Usuario Administrador</h4>';
+
+        document.getElementById('modalLogs').innerHTML += '<hr></div><h4 align="center"><strong> Usuario Administrador</strong></h4>';
         document.getElementById('modalLogs').innerHTML += '<b>Administrador </b><input type="checkbox" checked>';
-        document.getElementById('modalLogs').innerHTML += '<hr><h4 align="center"> Administrar</h4><div style="margin-left:10%">';
+        document.getElementById('modalLogs').innerHTML += '<hr><h4 align="center"> <strong> Administrar</strong></h4><div style="margin-left:10%">';
         if (arrayData[9] == 't') {
             document.getElementById('modalLogs').innerHTML += '<b>Registros de Administrador</b> <input type="checkbox" checked><br>';
         } else {
@@ -73,9 +74,15 @@ function Mostrar(a) {
             document.getElementById('modalLogs').innerHTML += '<b>Modulo Log</b> <input type="checkbox"><br>';
         }
     } else {
-        document.getElementById('modalLogs').innerHTML += '<hr></div><h4 align="center"> Usuario Administrador</h4>';
+        if (arrayData[18] == 't') {
+            document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados</b> <input type="checkbox" checked>';
+        } else {
+            document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados</b> <input type="checkbox">';
+        }
+        document.getElementById('modalLogs').innerHTML += '<hr></div><h4 align="center"> <strong> Usuario Administrador</strong></h4>';
         document.getElementById('modalLogs').innerHTML += '<b>Administrador </b><input type="checkbox" >';
     }
+    $('b').css('margin-left', '10%');
 }
 
 function ModificarElementos() {

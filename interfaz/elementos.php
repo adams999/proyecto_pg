@@ -164,7 +164,8 @@ if ($_SESSION['id_usuarioA']) {
                                                                                                 . $arreglo['cedula_usuario'] . ','
                                                                                                 . $arreglo['bandera'] . ','
                                                                                                 . $arreglo['id_usuario'] . ','
-                                                                                                . $arreglo['id_ele']; ?>')" value="<?php echo json_encode($arreglo['bandera'])  ?>">
+                                                                                                . $arreglo['id_ele'] . ','
+                                                                                                . $arreglo['mod_apa']; ?>')" value="<?php echo json_encode($arreglo['bandera'])  ?>">
                 <br><i class="glyphicon glyphicon-option-vertical"></i>
             </a>
             <?php

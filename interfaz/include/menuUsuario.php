@@ -272,20 +272,23 @@
 							</a>
 						</li>
 
-						<li class="divider"></li>
+						<?php
+							if ($arreglo['mod_apa'] == 't') {
+								echo '<li class="divider"></li>
 
 						<li class="menu1">
 							<a href="produApartados.php#ir" class="menu2">
 								<img class="menu3" src="icon/produApartados.png">
 								<i class="menu4">
-									&nbsp; Productos Apartados
-									<?php
-										if (@$acumulador > 0) {
-											echo '&nbsp;<span class="badge" style="color:white; background:orange;">' . @$acumulador . '</span>';
-										} ?>
-								</i>
+									&nbsp; Productos Apartados';
+								if (@$acumulador > 0) {
+									echo '&nbsp;<span class="badge" style="color:white; background:orange;">' . @$acumulador . '</span>';
+								}
+								echo '</i>
 							</a>
-						</li>
+						</li>';
+							}
+							?>
 
 						<li class="divider"></li>
 

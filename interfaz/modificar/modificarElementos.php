@@ -21,20 +21,21 @@ cat_ele='$array2[3]',
 cat_fre='$array2[4]',
 cat_mot='$array2[5]',
 cat_sus='$array2[6]',
-cat_tra='$array2[7]' ";
-if (@isset($array2[9])) {
-    $sql .= ", reg_adm='$array2[9]',";
-}
+cat_tra='$array2[7]',
+mod_apa='$array2[8]' ";
 if (@isset($array2[10])) {
-    $sql .= " mod_int='$array2[10]',";
+    $sql .= ", reg_adm='$array2[10]',";
 }
 if (@isset($array2[11])) {
-    $sql .= " mod_log='$array2[11]'";
+    $sql .= " mod_int='$array2[11]',";
+}
+if (@isset($array2[12])) {
+    $sql .= " mod_log='$array2[12]'";
 }
 $sql .= " WHERE id_ele = $id_ele";
 
 $sql2 = "UPDATE usuario SET bandera = ";
-if ($array2[8] == 'true') {
+if ($array2[9] == 'true') {
     $sql2 .= "10";
 } else {
     $sql2 .= "1";
