@@ -9,7 +9,7 @@ function Mostrar(a) {
     }
     console.log(a, arrayData);
     document.getElementById('modalLogs').innerHTML = '<h3 align="center"><b>Usuario:</b> ' +
-        arrayData[12] +
+        arrayData[12] + '  ' +
         arrayData[13] + '<br> <b>Cedula: </b>' +
         arrayData[14] + ' </h3><hr><h4 align="center">Menu</h4><div style="margin-left:10%">';
     if (arrayData[0] == 't') {
