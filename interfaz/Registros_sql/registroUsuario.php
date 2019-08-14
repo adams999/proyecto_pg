@@ -51,19 +51,20 @@ if ($resul1 >= 1) {
 
 	 		VALUES
 
-		('$cedula_usuario', '$nombre_usuario', '$apellido_usuario', '$correo_usuario', '$contra_usuario', '$estado', '$ciudad', '$direccion','$cod_telef_pers', '$telef_personal', '$cod_telef_hog', '$telef_hog', '1', '$estatus', '$pregunta_seg', '$respuesta_seg')";
+    ('$cedula_usuario', '$nombre_usuario', '$apellido_usuario', '$correo_usuario', '$contra_usuario', '$estado', '$ciudad', '$direccion','$cod_telef_pers', '$telef_personal', '$cod_telef_hog', '$telef_hog', '1', '$estatus', '$pregunta_seg', '$respuesta_seg')";
 }
 
 date_default_timezone_set('America/Caracas');
 $date_time = date('d/m/Y H:i');
-function GetMAC(){
+function GetMAC()
+{
   ob_start();
   system('getmac');
   $Content = ob_get_contents();
   ob_clean();
-  return substr($Content, strpos($Content,'\\')-20, 17);
+  return substr($Content, strpos($Content, '\\') - 20, 17);
 }
-$mac=GetMAC();
+$mac = GetMAC();
 $sqlLog = str_replace("'", "", $insertar);
 $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
 				   VALUES
@@ -73,7 +74,22 @@ $queryPreLog = pg_query($conexion, $sqlPreLog);
 
 //verificar consulta
 $resultado = pg_query($conexion, $insertar);
+
 if ($resultado) {
+  $Select = "SELECT id_usuario from usuario ORDER BY id_usuario DESC limit 1";
+  $resultUsuario = pg_query($conexion, $Select);
+
+  while ($arreglo = pg_fetch_array($resultUsuario)) { //este arreglo ordena la informacion del array correspondiente a los apartados para despues llamar la informacion que se necesite
+    $idUsuario = $arreglo['id_usuario'];
+  };
+
+  $insertElem = "INSERT INTO elementos (id_usu, cat_acc, cat_car, cat_cha, cat_ele, cat_fre, cat_mot, cat_sus, cat_tra, estatus, reg_adm, mod_int, mod_log)
+
+  VALUES
+
+  ('$idUsuario', 't', 't', 't', 't', 't', 't', 't','t', '1', 't', 't', 't')";
+  pg_query($conexion, $insertElem);
+
   echo "<script>alert(' -$nombre_usuario $apellido_usuario- Enhorabuena Te has Registrado en Yural C.A Satisfactoriamente!!!');
 				window.location='../loginUsuario.php';
 				</script>";
