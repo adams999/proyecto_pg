@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['id_usuario_a']) { //si esta loguado como administrador me dejara hacer este proceso si no no realizara este proceso
+if ($_SESSION['correo_usuarioA']) { //si esta loguado como administrador me dejara hacer este proceso si no no realizara este proceso
 
 } else {
    header("Location:../index.php");
@@ -33,7 +33,7 @@ $result = pg_query($conexion, $sql2);
 //aqui saldra este aviso y saldra que el proveedor esta eliminado "logicamente"
 if ($result == true) {
    echo "<script>alert('Has Restaurado El Banco Con el ID:  --$id--  Satifactoriamente!!!');
-   	window.location='../listaUsuDesac.php#ir';exit();</script>";
+   	window.location='../bancoEmpresaEliminados.php#ir';</script>";
 }
 
 pg_close($conexion);

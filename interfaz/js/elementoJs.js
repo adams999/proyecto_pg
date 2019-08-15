@@ -107,8 +107,11 @@ function ModificarElementos() {
     request.open("POST", 'modificar/modificarElementos.php?id_usu=' + arrayData[16] + '&id_ele=' + arrayData[17]);
     request.send(datas);
 
-    alert('Modificación Exitosa');
-    window.location = '../interfaz/elementos.php';
+    swal("Exito", "Cambio Realizado!", "success");
+    setInterval(() => {
+        window.location = '../interfaz/elementos.php';
+    }, 1500);
+
 
     console.log(request);
     valoresCheck = null;
@@ -116,11 +119,23 @@ function ModificarElementos() {
 }
 
 function preguntar(id) {
-    eliminar = confirm("Deseas Modificar los Elementos para la Visualización de este Usuario?");
-    if (eliminar) {
-        this.ModificarElementos();
-        //Redireccionamos si das a aceptar
-        //window.location.href = "modificar/modificarElementos.php?id_usu=" + arrayData[16] + '&id_ele=' + arrayData[17]; //página web a la que te redirecciona si confirmas la eliminación
+    swal({
+        title: "Deseas Realizar este Cambio?",
+        text: "Modificaras las Opciones para este usuario!",
+        icon: "info",
+        buttons: true,
+        successMode: true
+    }).then((willDelete) => {
+        if (willDelete) {
+            this.ModificarElementos();
+        } else {
+            swal("No se realizó Ningún Cambio.");
+        }
+    });
+    // if (eliminar) {
+    //     this.ModificarElementos();
+    //     //Redireccionamos si das a aceptar
+    //     //window.location.href = "modificar/modificarElementos.php?id_usu=" + arrayData[16] + '&id_ele=' + arrayData[17]; //página web a la que te redirecciona si confirmas la eliminación
 
-    }
+    // }
 }
