@@ -52,6 +52,11 @@ function Mostrar(a) {
     } else {
         document.getElementById('modalLogs').innerHTML += '<b>Categoria Tracción</b> <input type="checkbox"><br>';
     }
+    if (arrayData[18] == 't') {
+        document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados (Solo Como Usuario)</b> <input type="checkbox" checked>';
+    } else {
+        document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados (Solo Como Usuario)</b> <input type="checkbox">';
+    }
 
     if (arrayData[15] == 10) {
 
@@ -74,11 +79,6 @@ function Mostrar(a) {
             document.getElementById('modalLogs').innerHTML += '<b>Modulo Log</b> <input type="checkbox"><br>';
         }
     } else {
-        if (arrayData[18] == 't') {
-            document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados</b> <input type="checkbox" checked>';
-        } else {
-            document.getElementById('modalLogs').innerHTML += '<b>Modulo de Apartados</b> <input type="checkbox">';
-        }
         document.getElementById('modalLogs').innerHTML += '<hr></div><h4 align="center"> <strong> Usuario Administrador</strong></h4>';
         document.getElementById('modalLogs').innerHTML += '<b>Administrador </b><input type="checkbox" >';
     }

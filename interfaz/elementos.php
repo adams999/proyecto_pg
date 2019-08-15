@@ -6,6 +6,8 @@ if ($_SESSION['id_usuarioA']) {
 } else {
     header("Location:index.php");
 }
+
+@$busqueda = $_GET['busqueda'];
 ?>
 
 <html lang="es">
@@ -39,7 +41,11 @@ if ($_SESSION['id_usuarioA']) {
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <form action="elementos.php" method="get">
                         <br>
-                        <input require type="search" name="busqueda" id="busqueda" placeholder="Cedula/Nombre">
+                        <input require type="search" name="busqueda" id="busqueda" placeholder="Cedula/Nombre" <?php
+                                                                                                                if (isset($busqueda)) {
+                                                                                                                    echo 'value="' . $busqueda . '"';
+                                                                                                                }
+                                                                                                                ?>>
                         <button class="btn btn-primary" type="submit">Buscar Usuario</button>
                     </form>
                 </div>
@@ -55,7 +61,6 @@ if ($_SESSION['id_usuarioA']) {
             $num = pg_num_rows($registros);
             $pag = ceil($num / 10);
 
-            @$busqueda = $_GET['busqueda'];
             @$prodIni = $_GET['ini'];
             @$prodFin = $_GET['fin'];
 
