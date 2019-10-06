@@ -66,9 +66,10 @@ function GetMAC()
 }
 $mac = GetMAC();
 $sqlLog = str_replace("'", "", $insertar);
+$rand = 9999;
 $sqlPreLog = "INSERT INTO pre_logs (id_usu, ip_usu, sql_exe, date_time, inf_usu, url_sql, mac_usu) 
 				   VALUES
-				   ('9999', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '$mac')";
+				   ('{$rand} ', '{$_SERVER['REMOTE_ADDR']}', '$sqlLog', '$date_time', '{$_SERVER['HTTP_USER_AGENT']}', '{$_SERVER['PHP_SELF']}', '$mac')";
 
 $queryPreLog = pg_query($conexion, $sqlPreLog);
 
@@ -83,11 +84,11 @@ if ($resultado) {
     $idUsuario = $arreglo['id_usuario'];
   };
 
-  $insertElem = "INSERT INTO elementos (id_usu, cat_acc, cat_car, cat_cha, cat_ele, cat_fre, cat_mot, cat_sus, cat_tra, estatus, reg_adm, mod_int, mod_log)
+  $insertElem = "INSERT INTO elementos (id_usu, cat_acc, cat_car, cat_cha, cat_ele, cat_fre, cat_mot, cat_sus, cat_tra, estatus, reg_adm, mod_int, mod_log, mod_apa)
 
   VALUES
 
-  ('$idUsuario', 't', 't', 't', 't', 't', 't', 't','t', '1', 't', 't', 't')";
+  ('$idUsuario', 't', 't', 't', 't', 't', 't', 't','t', '1', 't', 't', 't','t')";
   pg_query($conexion, $insertElem);
 
   echo "<script>alert(' -$nombre_usuario $apellido_usuario- Enhorabuena Te has Registrado en Yural C.A Satisfactoriamente!!!');

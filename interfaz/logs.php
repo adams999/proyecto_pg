@@ -38,6 +38,10 @@ if ($_SESSION['id_usuarioA']) {
                 alert('Ingresa Todos los datos para proceder a la busqueda');
             }
         }
+
+        function recargaPag() {
+            window.location.href = window.location.href.split("?")[0];
+        }
     </script>
 </head>
 
@@ -78,7 +82,10 @@ if ($_SESSION['id_usuarioA']) {
                         <option value="apartado">apartado</option>
                         <option value="bancos_empresa">bancos_empresa</option>
                         <option value="bancos_usuario">bancos_usuario</option>
+                        <option value="detalle_apartado">detalle_apartado</option>
                         <option value="elementos">elementos</option>
+                        <option value="empresa">empresa</option>
+                        <option value="ganancia_iva">ganancia_iva</option>
                         <option value="catalogo_venta">productos</option>
                         <option value="opiniones">opiniones</option>
                         <option value="pedidos">pedidos</option>
@@ -98,16 +105,20 @@ if ($_SESSION['id_usuarioA']) {
                                     echo 'value="' . $_GET['accion'] . '"';
                                 } ?>>
                             <?php if (isset($_GET['accion'])) {
-                                if ($_GET['accion'] == 'INSERT') {
+                                if ($_GET['accion'] == " IN ('INSERT')") {
                                     echo  'Registro';
                                 }
-                                if ($_GET['accion'] == 'UPDATE') {
+                                if ($_GET['accion'] == " IN ('UPDATE')") {
                                     echo 'Modificaciones';
+                                }
+                                if ($_GET['accion'] == " IN ('UPDATE','INSERT')") {
+                                    echo 'Registros y Modificaciones';
                                 }
                             } ?>
                         </option>
-                        <option value="INSERT">Registro</option>
-                        <option value="UPDATE">Modificaciones</option>
+                        <option value=" IN ('INSERT')">Registro</option>
+                        <option value=" IN ('UPDATE')">Modificaciones</option>
+                        <option value=" IN ('UPDATE','INSERT')">Registros y Modificaciones</option>
                     </select>
                 </div>
 
@@ -137,10 +148,14 @@ if ($_SESSION['id_usuarioA']) {
                                                                                                                                                     echo date('Y-m-d'); ?>"><br>
                 </div>
 
-                <div align="center">
+                <div align="center" class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                     <button class="btn btn-primary glyphicon glyphicon-search" onClick="buscar()"> Buscar</button>
                 </div>
             </form>
+            <div align="center" class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                <button class="btn btn-danger glyphicon glyphicon-repeat" onClick="recargaPag()" href="logs.php"> Limpiar</button>
+            </div>
+
 
             <?php
 
@@ -172,13 +187,13 @@ if ($_SESSION['id_usuarioA']) {
                 $sql .= "tab_log = '" . $_GET['tabla'] . "'";
             }
             if (isset($_GET['accion'])) {
-                $sql .= " AND acc_log = '" . $_GET['accion'] . "'";
+                $sql .= " AND acc_log " . $_GET['accion'];
             }
             if (isset($_GET['fInicio']) and isset($_GET['fFinal'])) {
                 $sql .= " AND DATE(date_log) BETWEEN '" . $_GET['fInicio'] . "' AND '" . $_GET['fFinal'] . "'";
             } else {
                 $sql .= "
-                tab_log = 'apartados'
+                tab_log = 'apartado'
                 OR tab_log = 'bancos_empresa'
                 OR tab_log = 'bancos_usuario'
                 OR tab_log = 'catalogo_venta'
@@ -188,7 +203,10 @@ if ($_SESSION['id_usuarioA']) {
                 OR tab_log = 'usuario'
                 OR tab_log = 'ventas_productos'
                 OR tab_log = 'elementos'
-                AND acc_log = 'INSERT' ";
+                OR tab_log = 'detalle_apartado'
+                OR tab_log = 'empresa'
+                OR tab_log = 'ganancia_iva'
+                OR tab_log = 'pedidos'";
             }
             $sql .= " ORDER BY
             id_log DESC";
@@ -230,7 +248,7 @@ if ($_SESSION['id_usuarioA']) {
                     $sql .= " WHERE tab_log = '" . $_GET['tabla'] . "'";
                 }
                 if (isset($_GET['accion'])) {
-                    $sql .= " AND acc_log = '" . $_GET['accion'] . "'";
+                    $sql .= " AND acc_log " . $_GET['accion'];
                 }
                 if (isset($_GET['fInicio']) and isset($_GET['fFinal'])) {
                     $sql .= " AND DATE(date_log) BETWEEN '" . $_GET['fInicio'] . "' AND '" . $_GET['fFinal'] . "'";
@@ -266,13 +284,13 @@ if ($_SESSION['id_usuarioA']) {
                     $sql .= "tab_log = '" . $_GET['tabla'] . "'";
                 }
                 if (isset($_GET['accion'])) {
-                    $sql .= " AND acc_log = '" . $_GET['accion'] . "'";
+                    $sql .= " AND acc_log " . $_GET['accion'];
                 }
                 if (isset($_GET['fInicio']) and isset($_GET['fFinal'])) {
                     $sql .= " AND DATE(date_log) BETWEEN '" . $_GET['fInicio'] . "' AND '" . $_GET['fFinal'] . "'";
                 } else {
                     $sql .= "
-                    tab_log = 'apartados'
+                    tab_log = 'apartado'
                     OR tab_log = 'bancos_empresa'
                     OR tab_log = 'bancos_usuario'
                     OR tab_log = 'catalogo_venta'
@@ -282,7 +300,10 @@ if ($_SESSION['id_usuarioA']) {
                     OR tab_log = 'usuario'
                     OR tab_log = 'ventas_productos'
                     OR tab_log = 'elementos'
-                    AND acc_log = 'INSERT' ";
+                    OR tab_log = 'detalle_apartado'
+                    OR tab_log = 'empresa'
+                    OR tab_log = 'ganancia_iva'
+                    OR tab_log = 'pedidos'";
                 }
                 $sql .= " ORDER BY
                 id_log DESC
@@ -308,6 +329,8 @@ if ($_SESSION['id_usuarioA']) {
                     'cantidad' => $arreglo2['cuenta']
                 ];
             }
+            //var_dump($sql);
+            //var_dump($query2);
 
 
             if (isset($_GET['tabla']) and isset($_GET['fInicio']) and isset($_GET['fFinal'])) {
@@ -347,15 +370,15 @@ if ($_SESSION['id_usuarioA']) {
                                                         echo "value='" . json_encode($response)  . "'";
                                                     }   ?>>
 
-            <input id="dataGrafica2" type="hidden" <?php if (@isset($response3)) {
+            <input id="dataGrafica2" class="container col-xs-12 col-sm-12 col-md-12 col-lg-12"  type="hidden" <?php if (@isset($response3)) {
                                                         echo "value='" . json_encode($response3)  . "'";
                                                     }   ?>>
 
             <?php
-            echo '<div id="graficaBarras" style="width: 100%; height: 300px;"></div>';
+            echo '<div  class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" id="graficaBarras" style="width: 100%; height: 300px;"></div>';
 
             if (@isset($response3)) {
-                echo '<div id="graficaTorta" style="width: 100%; height: 500px;"></div>';
+                echo '<div id="graficaTorta" class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" style="width: 100%; height: 500px;"></div>';
             }
 
 
@@ -386,28 +409,29 @@ if ($_SESSION['id_usuarioA']) {
             ?>
 
             <?php
+
             while (@$arreglo = pg_fetch_array($query)) { //este arreglo ordena la informacion del array correspondiente a los Pedidos para despues llamar la informacion que se necesite
 
-                $arreglo['log_sql'] = str_replace(['"', "'"], " ", $arreglo['log_sql']);
-                $arreglo['val_mod_log'] = str_replace(['"', "'"], " ", $arreglo['val_mod_log']);
+                //$arreglo['log_sql'] = str_replace(['"', "'"], " ", $arreglo['log_sql']);
+                //$arreglo['val_mod_log'] = str_replace(['"', "'"], " ", $arreglo['val_mod_log']);
 
                 //aqui muestro el tr con los PEDIDOS correspondientes 
                 ?>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table class="table table-hover table-bordered table-condensed" align="center">
-                    <tr class="parrafo info" align="center">
-                        <td class="titulo" width="30%"><br><b>CI: </b> <?php echo $arreglo['cedula_usuario']; ?>. <br><b>Nombre: </b> <?php echo $arreglo['nombre_usuario']; ?> <br><b>Apellido: </b><?php echo $arreglo['apellido_usuario']; ?><br><b>Email: </b><?php echo $arreglo['correo_usuario']; ?></td>
-                        <td class="titulo" width="30%"><b>IP: </b><?php echo $arreglo['ip_usu']; ?><br><b>Navegadores</b><?php echo $arreglo['inf_usu']; ?> <br><b>Url: </b> <?php echo $arreglo['url_sql']; ?><br><b>MAC: </b><?php echo $arreglo['mac_usu']; ?></td>
-                        <td class="titulo text-center" width="30%"><br><br><br><?php echo $arreglo['date_log']; ?></td>
-                        <td class="titulo" width="10%"><br><br>
-                            <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo $arreglo["log_sql"]; ?>','<?php echo $arreglo["val_mod_log"]; ?>')">
-                                <b>Info</b><br><i class="glyphicon glyphicon-eye-open"></i>
-                            </a>
-                        </td>
-                    </tr>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <table class="table table-hover table-bordered table-condensed" align="center">
+                        <tr class="parrafo info" align="center">
+                            <td class="titulo" width="30%"><br><b>CI: </b> <?php echo $arreglo['cedula_usuario']; ?>. <br><b>Nombre: </b> <?php echo $arreglo['nombre_usuario']; ?> <br><b>Apellido: </b><?php echo $arreglo['apellido_usuario']; ?><br><b>Email: </b><?php echo $arreglo['correo_usuario']; ?></td>
+                            <td class="titulo" width="30%"><b>IP: </b><?php echo $arreglo['ip_usu']; ?><br><b>Navegadores</b><?php echo $arreglo['inf_usu']; ?> <br><b>Url: </b> <?php echo $arreglo['url_sql']; ?><br><b>MAC: </b><?php echo $arreglo['mac_usu']; ?></td>
+                            <td class="titulo text-center" width="30%"><br><br><br><?php echo $arreglo['date_log']; ?></td>
+                            <td class="titulo" width="10%"><br><br>
+                                <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo base64_encode(str_replace(['"', "'"], " ", $arreglo['log_sql'])); ?>','<?php echo base64_encode(str_replace(["DATA NUEVA:", "DATA ANTIGUA:"], ['<hr><b>DATA NUEVA:</b> ', "<hr><b>DATA ANTIGUA:</b> "], (str_replace(['"', "'", ","], "<br>", $arreglo['val_mod_log'])))); ?>')">
+                                    <b>Info</b><br><i class="glyphicon glyphicon-eye-open"></i>
+                                </a>
+                            </td>
+                        </tr>
 
-                </table>
-            </div>
+                    </table>
+                </div>
             <?php
             }
 
@@ -445,7 +469,8 @@ if ($_SESSION['id_usuarioA']) {
                         <div class="modal-body row" id="modalLogs">
                             <script>
                                 function Mostrar(a, b) {
-                                    document.getElementById('modalLogs').innerHTML = '<b>SQL: </b>' + a + '<br><br>' + '<b>Registro: </b>' + b;
+
+                                    document.getElementById('modalLogs').innerHTML = '<div style="margin-left:10%; margin-right:10%"><b>SQL: </b>' + atob(a) + '<br><br>' + '<p align="center"><b>MOVIMIENTO: </b></p>' + atob(b) + '</div>';
                                 }
                             </script>
                         </div>
