@@ -218,13 +218,12 @@ while (@$arreglo1 = pg_fetch_array($query1)) { //este arreglo ordena la informac
                                 @$acum_cant_apart += $cantidad_apartada;
 
 
-
                                 //aqui muestro el tr con los apartados correspondientes del usuario logueado
                                 echo '   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">';
-                                if ($arreglo5['fecha3dias'] == date('d/m/Y')) {
+                                if (strtotime($arreglo5['fecha3dias']) == strtotime(date('d/m/Y'))) {
                                     echo "<b style='color:orange'>Hoy es La Fecha Máxima por favor Contactar al Cliente!!!</b>";
                                 }
-                                if ($arreglo5['fecha3dias'] > date('d/m/Y')) {
+                                if (strtotime($arreglo5['fecha3dias']) < strtotime(date('d/m/Y'))) {
                                     echo "<b style='color:red'>Fecha Maxima de apartado completada. Contactar al Usuario o Eliminar este apartado!</b>";
                                 }
                             }

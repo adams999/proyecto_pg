@@ -61,7 +61,7 @@ echo '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><hr class="hr2"></div
 
 
 //esta es la sentencia para poder ejecutar y mostrar el buscador
-$result=("SELECT * FROM catalogo_venta WHERE nombre_producto_v ~* '$buscar' or marca ~* '$buscar' or descripcion ~* '$buscar' and productos_disponibles >'0' and estatus=1 ORDER BY nombre_producto_v ASC"); 
+$result=("SELECT * FROM catalogo_venta WHERE (nombre_producto_v ~* '$buscar' or marca ~* '$buscar' or descripcion ~* '$buscar') and productos_disponibles >0 and estatus=1 ORDER BY nombre_producto_v ASC"); 
 
 $query=pg_query($conexion,$result);
 $cantidad=pg_num_rows($query);

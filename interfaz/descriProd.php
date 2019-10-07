@@ -175,14 +175,15 @@ require("conexionBD/conexionBD.php");
                 </div>
 
                 <form class="form form-group" action="apartados/apartar.php" method="GET">
-                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 has-warning" align="center">
+                    
+
+                    ';
+                        if ($arr2['mod_apa'] == 't') {
+                            echo '<div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-4 has-warning" align="center">
                         <br>
                         <input title="Maximo de 5 Productos a Apartar" type="text" class="cantidadApartada form-control" minlength="1" maxlength="3" required="required" name="cantidad" pattern="[1-5]+">
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" align="center">';
-                        if ($arr2['mod_apa'] == 't') {
-                            echo '<a href="apartados/apartar.php">
+                    </div><div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" align="center">
+                    <a href="apartados/apartar.php">
                                 <button class="btn btn-group descripApartar" type="submit">
                                     Apartar&nbsp;&nbsp;   <i class="glyphicon glyphicon-ok"></i>
                                 </button>     
@@ -233,24 +234,24 @@ require("conexionBD/conexionBD.php");
 
             if (@$permiso) {
                 ?>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <form class="form form-group" action="opinar/opinarUsua.php" method="POST">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <form class="form form-group" action="opinar/opinarUsua.php" method="POST">
 
-                    <label>Vamos!!! Opina Sobre Este Producto y Tù Experiencia en Yural C.A. Por Favor:</label>
+                        <label>Vamos!!! Opina Sobre Este Producto y Tù Experiencia en Yural C.A. Por Favor:</label>
 
-                    <div class="col-lg-11 col-md-10 col-sm-9 col-xs-8">
-                        <textarea class="form-control" rows="3" minlength="20" maxlength="255" placeholder="Que Tal Fue Tù Experiecia con la Compra de este Articulo y con Nosòtros?" name="opinion" required autofocus pattern="[A-Za-z.0-9 ]+" title="No Se Admiten Caracteres Especiales" type="text"></textarea>
-                    </div>
+                        <div class="col-lg-11 col-md-10 col-sm-9 col-xs-8">
+                            <textarea class="form-control" rows="3" minlength="20" maxlength="255" placeholder="Que Tal Fue Tù Experiecia con la Compra de este Articulo y con Nosòtros?" name="opinion" required autofocus pattern="[A-Za-z.0-9 ]+" title="No Se Admiten Caracteres Especiales" type="text"></textarea>
+                        </div>
 
-                    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4" align="center"><br>
-                        <button class="btn btn-primary">
-                            Opinar <i class="glyphicon glyphicon-thumbs-up"></i>
-                        </button>
-                    </div>
-                    <input type="hidden" name="id_compra" <?php echo 'value="' . $id_compra . '"'; ?>>
-                    <input type="hidden" name="id_producto_venta" <?php echo 'value="' . $id . '"'; ?>>
-                </form>
-            </div>
+                        <div class="col-lg-1 col-md-2 col-sm-3 col-xs-4" align="center"><br>
+                            <button class="btn btn-primary">
+                                Opinar <i class="glyphicon glyphicon-thumbs-up"></i>
+                            </button>
+                        </div>
+                        <input type="hidden" name="id_compra" <?php echo 'value="' . $id_compra . '"'; ?>>
+                        <input type="hidden" name="id_producto_venta" <?php echo 'value="' . $id . '"'; ?>>
+                    </form>
+                </div>
 
             <?php
             }

@@ -370,9 +370,9 @@ if ($_SESSION['id_usuarioA']) {
                                                         echo "value='" . json_encode($response)  . "'";
                                                     }   ?>>
 
-            <input id="dataGrafica2" class="container col-xs-12 col-sm-12 col-md-12 col-lg-12"  type="hidden" <?php if (@isset($response3)) {
-                                                        echo "value='" . json_encode($response3)  . "'";
-                                                    }   ?>>
+            <input id="dataGrafica2" class="container col-xs-12 col-sm-12 col-md-12 col-lg-12" type="hidden" <?php if (@isset($response3)) {
+                                                                                                                    echo "value='" . json_encode($response3)  . "'";
+                                                                                                                }   ?>>
 
             <?php
             echo '<div  class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" id="graficaBarras" style="width: 100%; height: 300px;"></div>';

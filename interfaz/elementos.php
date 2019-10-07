@@ -55,7 +55,18 @@ if ($_SESSION['id_usuarioA']) {
             <?php
 
             require("conexionBD/conexionBD.php");
-            $sql = "SELECT * FROM usuario where estatus=1 ORDER BY id_usuario desc";
+            $sql = "SELECT
+            *
+            FROM
+                usuario
+            LEFT JOIN elementos ON elementos.id_usu = usuario.id_usuario
+            WHERE
+                usuario.estatus = 1 ";
+            if (@isset($_GET['busqueda'])) {
+                $sql .= " AND nombre_usuario LIKE '%" . $busqueda . "%'
+                        OR cedula_usuario LIKE '%" . $busqueda . "%'
+                        OR apellido_usuario LIKE '%" . $busqueda . "%'";
+            };
             /* codigos de paginacion */
             $registros = pg_query($conexion, $sql);
             $num = pg_num_rows($registros);
@@ -152,27 +163,27 @@ if ($_SESSION['id_usuarioA']) {
                         <td class="titulo" width="10%"><b>' . $arreglo['cod_telef_hog'] . '</b>-' . $arreglo['telef_hog'] . ' <br><br> <b>' . $arreglo['cod_telef_pers'] . '</b>-' . $arreglo['telef_hog'] . '</td>
                         <td class="titulo" width="10%">';
                 ?>
-            <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo $arreglo['cat_acc'] . ','
-                                                                                                . $arreglo['cat_car'] . ','
-                                                                                                . $arreglo['cat_cha'] . ','
-                                                                                                . $arreglo['cat_ele'] . ','
-                                                                                                . $arreglo['cat_fre'] . ','
-                                                                                                . $arreglo['cat_mot'] . ','
-                                                                                                . $arreglo['cat_sus'] . ','
-                                                                                                . $arreglo['cat_tra'] . ','
-                                                                                                . $arreglo[16] . ','
-                                                                                                . $arreglo['reg_adm'] . ','
-                                                                                                . $arreglo['mod_int'] . ','
-                                                                                                . $arreglo['mod_log'] . ','
-                                                                                                . $arreglo['nombre_usuario'] . ','
-                                                                                                . $arreglo['apellido_usuario'] . ','
-                                                                                                . $arreglo['cedula_usuario'] . ','
-                                                                                                . $arreglo['bandera'] . ','
-                                                                                                . $arreglo['id_usuario'] . ','
-                                                                                                . $arreglo['id_ele'] . ','
-                                                                                                . $arreglo['mod_apa']; ?>')" value="<?php echo json_encode($arreglo['bandera'])  ?>">
-                <br><i class="glyphicon glyphicon-option-vertical"></i>
-            </a>
+                <a href="#" data-toggle="modal" data-target="#InfoSql" onClick="Mostrar('<?php echo $arreglo['cat_acc'] . ','
+                                                                                                    . $arreglo['cat_car'] . ','
+                                                                                                    . $arreglo['cat_cha'] . ','
+                                                                                                    . $arreglo['cat_ele'] . ','
+                                                                                                    . $arreglo['cat_fre'] . ','
+                                                                                                    . $arreglo['cat_mot'] . ','
+                                                                                                    . $arreglo['cat_sus'] . ','
+                                                                                                    . $arreglo['cat_tra'] . ','
+                                                                                                    . $arreglo[16] . ','
+                                                                                                    . $arreglo['reg_adm'] . ','
+                                                                                                    . $arreglo['mod_int'] . ','
+                                                                                                    . $arreglo['mod_log'] . ','
+                                                                                                    . $arreglo['nombre_usuario'] . ','
+                                                                                                    . $arreglo['apellido_usuario'] . ','
+                                                                                                    . $arreglo['cedula_usuario'] . ','
+                                                                                                    . $arreglo['bandera'] . ','
+                                                                                                    . $arreglo['id_usuario'] . ','
+                                                                                                    . $arreglo['id_ele'] . ','
+                                                                                                    . $arreglo['mod_apa']; ?>')" value="<?php echo json_encode($arreglo['bandera'])  ?>">
+                    <br><i class="glyphicon glyphicon-option-vertical"></i>
+                </a>
             <?php
                 echo '</td>
                     </tr> 

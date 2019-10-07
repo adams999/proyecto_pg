@@ -138,10 +138,12 @@ $apellidoUsuario = $_SESSION['apellido_usuario'];
                         echo '   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" align="center">';
                         date_default_timezone_set('America/Caracas');
 
-                        if ($arreglo['fecha3dias'] == date('d/m/Y')) {
-                            echo "<b style='color:orange' align='center'>Por favor Cancela este producto ya que hoy es la Fecha Limite!!!</b>";
+
+                        var_dump($fecha_actual, $fecha_entrada);
+                        if (strtotime($arreglo['fecha3dias'])  ==  strtotime(date('d/m/Y'))) {
+                            echo "<b style='color:orange' align='center'>Por Favor Cancela este producto ya que hoy es la Fecha Limite!!!</b>";
                         }
-                        if ($arreglo['fecha3dias'] > date('d/m/Y')) {
+                        if (strtotime($arreglo['fecha3dias']) < strtotime(date('d/m/Y'))) {
                             echo "<b style='color:red' align='center'>Por Favor Cancela este Apartado ya que se Vencio su fecha Limite!!!</b>";
                         }
                         echo '<table class="table table" align="center">

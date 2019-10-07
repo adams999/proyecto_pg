@@ -226,7 +226,7 @@ while (@$arreglo4 = pg_fetch_array($query5)) { //este arreglo ordena la informac
                     }
                     echo '</button>
                         </a>
-                        <hr>
+                        <br><br>
                     </div>
     
     
