@@ -139,7 +139,7 @@ $apellidoUsuario = $_SESSION['apellido_usuario'];
                         date_default_timezone_set('America/Caracas');
 
 
-                        var_dump($fecha_actual, $fecha_entrada);
+
                         if (strtotime($arreglo['fecha3dias'])  ==  strtotime(date('d/m/Y'))) {
                             echo "<b style='color:orange' align='center'>Por Favor Cancela este producto ya que hoy es la Fecha Limite!!!</b>";
                         }
